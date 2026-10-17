@@ -1,0 +1,3 @@
+product_id;current_stock;min_required_stock;consumption_intensity
+1;15.0;20.0;2.0
+2;50.0;100.0;10.0
