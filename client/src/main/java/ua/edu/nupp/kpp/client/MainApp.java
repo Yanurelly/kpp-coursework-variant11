@@ -12,6 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class MainApp extends Application {
@@ -153,6 +156,7 @@ public class MainApp extends Application {
         Button update = new Button("Змінити");
         Button delete = new Button("Видалити");
         Button refresh = new Button("Оновити");
+        Button importBtn = new Button("Імпорт CSV");
 
         add.setOnAction(e -> safe(() -> {
             api.addInventory(readInventory(null, productId, currentStock, minRequiredStock, consumptionIntensity));
@@ -168,6 +172,7 @@ public class MainApp extends Application {
             refreshAll();
         }));
         refresh.setOnAction(e -> refreshInventories());
+        importBtn.setOnAction(e -> safe(this::importCsv));
 
         inventories.getSelectionModel().selectedItemProperty().addListener((o, a, inv) -> {
             if (inv != null) {
@@ -178,14 +183,43 @@ public class MainApp extends Application {
             }
         });
 
+        FlowPane buttonsPane = new FlowPane(6, 6, add, update, delete, refresh, importBtn);
+
         VBox form = new VBox(8,
                 new Label("ID товару"), productId,
                 new Label("Поточний запас"), currentStock,
                 new Label("Мінімальний запас"), minRequiredStock,
                 new Label("Інтенсивність споживання (0..100)"), consumptionIntensity,
-                new HBox(8, add, update, delete, refresh)
+                buttonsPane
         );
         return layout(inventories, form);
+    }
+
+    private void importCsv() {
+        try {
+            Path path = Files.exists(Path.of("sample-data", "inventory.csv"))
+                    ? Path.of("sample-data", "inventory.csv")
+                    : Path.of("client", "sample-data", "inventory.csv");
+            List<String> lines = Files.readAllLines(path);
+            for (String line : lines) {
+                String trimmed = line.trim();
+                if (trimmed.isEmpty() || trimmed.startsWith("product")) {
+                    continue;
+                }
+                String[] parts = trimmed.split("[;,]");
+                Inventory inv = new Inventory(
+                        null,
+                        Long.parseLong(parts[0].trim()),
+                        Double.parseDouble(parts[1].trim()),
+                        Double.parseDouble(parts[2].trim()),
+                        Double.parseDouble(parts[3].trim())
+                );
+                api.addInventory(inv);
+            }
+            refreshInventories();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Помилка читання CSV: " + e.getMessage());
+        }
     }
 
     private Pane orderPane() {
