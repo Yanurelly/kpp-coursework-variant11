@@ -1,4 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="4.0">
 
+    <servlet>
+        <servlet-name>ProductServlet</servlet-name>
+        <servlet-class>ua.edu.nupp.kpp.server.ProductServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProductServlet</servlet-name>
+        <url-pattern>/products</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SupplierServlet</servlet-name>
+        <servlet-class>ua.edu.nupp.kpp.server.SupplierServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SupplierServlet</servlet-name>
+        <url-pattern>/suppliers</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>InventoryServlet</servlet-name>
+        <servlet-class>ua.edu.nupp.kpp.server.InventoryServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InventoryServlet</servlet-name>
+        <url-pattern>/inventories</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ReplenishmentOrderServlet</servlet-name>
+        <servlet-class>ua.edu.nupp.kpp.server.ReplenishmentOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReplenishmentOrderServlet</servlet-name>
+        <url-pattern>/replenishment-orders</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -2,7 +2,6 @@ DROP DATABASE IF EXISTS warehouse_replenishment;
 CREATE DATABASE warehouse_replenishment;
 USE warehouse_replenishment;
 
--- Таблиця постачальників
 CREATE TABLE supplier (
                           id BIGINT AUTO_INCREMENT PRIMARY KEY,
                           name VARCHAR(160) NOT NULL,
@@ -10,7 +9,6 @@ CREATE TABLE supplier (
                           delay_risk_score DOUBLE NOT NULL
 );
 
--- Таблиця товарів
 CREATE TABLE product (
                          id BIGINT AUTO_INCREMENT PRIMARY KEY,
                          sku VARCHAR(40) NOT NULL,
@@ -18,7 +16,6 @@ CREATE TABLE product (
                          category VARCHAR(120) NOT NULL
 );
 
--- Таблиця запасів (посилається на товар)
 CREATE TABLE inventory (
                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
                            product_id BIGINT NOT NULL,
@@ -28,7 +25,6 @@ CREATE TABLE inventory (
                            FOREIGN KEY (product_id) REFERENCES product(id)
 );
 
--- Таблиця замовлень на поповнення (посилається на запаси та постачальника)
 CREATE TABLE replenishment_order (
                                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                      inventory_id BIGINT NOT NULL,
@@ -42,7 +38,6 @@ CREATE TABLE replenishment_order (
                                      FOREIGN KEY (supplier_id) REFERENCES supplier(id)
 );
 
--- Початкові демонстраційні дані
 
 INSERT INTO supplier (name, contact_info, delay_risk_score) VALUES
                                                                 ('ТОВ "Склад-Плюс"', 'Полтава, вул. Складська 1', 15.0),
